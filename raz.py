@@ -43,17 +43,17 @@ for val in regNumber:
     outbook = xlwt.Workbook()
     outsheet = outbook.add_sheet(name)
 
-    outsheet.col(0).width = 2 * 256
+    outsheet.col(0).width = 3 * 256
     outsheet.col(1).width = 16 * 256
     outsheet.col(2).width = 26 * 256
     outsheet.col(3).width = 27 * 256
     outsheet.col(4).width = 24 * 256
-    outsheet.col(5).width = 11 * 256
+    outsheet.col(5).width = 12 * 256
     outsheet.col(6).width = 4 * 256
     outsheet.col(7).width = 85 * 256
     outsheet.col(8).width = 7 * 256
     outsheet.col(9).width = 22 * 256
-    outsheet.col(0).width = 13 * 256
+    outsheet.col(10).width = 13 * 256
 
     for row in range(1,2):
         for col in range(ncols):
