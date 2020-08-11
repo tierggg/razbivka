@@ -1,14 +1,18 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import xlrd
 import xlwt
 from tkinter.filedialog import askopenfilename
+import subprocess
+import os
 
 filename = askopenfilename()
 rb = xlrd.open_workbook(filename)
 sheetR = rb.sheet_by_index(0)
 
 font = xlwt.Font()               # font
-font.name = 'Calibri'
-font.height = 11 * 20
+font.name = 'Times New Roman'
+font.height = 11 * 20            # Нужный размер шрифта нужно умножить на 20
 
 borders = xlwt.Borders()         # borders
 borders.left = 1
@@ -36,13 +40,15 @@ for k in range(len(colsWidths)):
     colDict[k] = colsWidths[k]
 
 cont = 1
+
 for val in regNumber:
+    print(cont, 'из', len(regNumber))
     cnt = 2
     outBook = xlwt.Workbook()
     outSheet = outBook.add_sheet(str(int(val)))
 
     for i in colDict:
-        outSheet.col(i).width = colDict[i] * 256
+        outSheet.col(i).width = colDict[i] * 256    # Нужную ширину стобца надо умножить на 256
 
     for row in range(1, 2):
         for col in range(sheetR.ncols):
@@ -57,5 +63,8 @@ for val in regNumber:
                     outSheet.write(cnt, col, sheetR.cell_value(row, col), style=style)
             cnt += 1
     outBook.save('D:\\1\\out\\' + str(int(val)) + '.xls')
-    print(cont, 'из', len(regNumber), 'завершён')
     cont += 1
+    
+path = 'D:\\1\\out\\'
+path=os.path.realpath(path)
+os.startfile(path)
