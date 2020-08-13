@@ -12,7 +12,8 @@ rb = xlrd.open_workbook(filename)
 sheetR = rb.sheet_by_index(0)
 
 path = askdirectory()
-path = realpath(path)
+#path = realpath(path)
+print(path)
 
 font = xlwt.Font()                      # font
 font.name = 'Times New Roman'
@@ -78,9 +79,8 @@ for val in regNumber:
                     outSheet.write(cnt, col, sheetR.cell_value(row, col), style=style)
             cnt += 1
 
-    #outBook.save('D:\\1\\out\\' + str(int(val)) + '.xls')
-    outBook.save(path + str(int(val)) + '.xls')
-    print(cont, 'из', len(regNumber))
+    outBook.save(path + '\\' + str(int(val)) + '.xls')
+    print(cont, 'из', len(regNumber), '   ', realpath(path + str(int(val)) + '.xls'))
     cont += 1
 
 startfile(path)
