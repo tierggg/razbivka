@@ -12,8 +12,6 @@ rb = xlrd.open_workbook(filename)
 sheetR = rb.sheet_by_index(0)
 
 path = askdirectory()
-#path = realpath(path)
-print(path)
 
 font = xlwt.Font()                      # font
 font.name = 'Times New Roman'
