@@ -64,7 +64,7 @@ for val in regNumber:
             cnt += 1
     outBook.save('D:\\1\\out\\' + str(int(val)) + '.xls')
     cont += 1
-    
+
 path = 'D:\\1\\out\\'
 path=os.path.realpath(path)
 os.startfile(path)
