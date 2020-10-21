@@ -10,7 +10,6 @@ from os.path import realpath
 filename = askopenfilename()
 rb = xlrd.open_workbook(filename)
 sheetR = rb.sheet_by_index(0)
-
 path = askdirectory()
 
 font = xlwt.Font()                      # font
@@ -41,12 +40,12 @@ regNumber = set()
 for row in range(3, sheetR.nrows):
     if sheetR.cell_type(row, 9) not in (xlrd.XL_CELL_EMPTY, xlrd.XL_CELL_BLANK):  # Проверка пуста ли ячейка
         regNumber.add(sheetR.cell_value(row, 9))
-
-# Ширина столбцов от первого до последнего, если ширина 0, столбец будет скрыт
-colsWidths = [3, 16, 26, 27, 24, 12, 4, 85, 7, 22, 13]
+'''
+# Ширина столбцов от первого до последнего, если ширина 0, столбец будет скрыт [3, 16, 26, 27, 24, 12, 4, 85, 7, 22, 13]
+colsWidths = [0, 16, 26, 27, 24, 0, 0, 0, 0, 22, 13]
 colDict = {}
 for k in range(len(colsWidths)):
-    colDict[k] = colsWidths[k]
+    colDict[k] = colsWidths[k]'''
 
 cont = 1
 for val in regNumber:
