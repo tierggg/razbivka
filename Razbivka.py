@@ -11,14 +11,21 @@ from os.path import realpath
 font = xlwt.Font()                      # font
 font.name = 'Times New Roman'
 font.height = 11 * 20
+
 borders = xlwt.Borders()                # borders
 borders.left = 1
 borders.right = 1
 borders.top = 1
 borders.bottom = 1
+
 style = xlwt.XFStyle()
 style.borders = borders
 style.font = font
+
+date_style = xlwt.XFStyle()
+date_style.num_format_str = "M/D/YY"
+date_style.borders = borders
+date_style.font = font
 
 filename = askopenfilename()
 rb = xlrd.open_workbook(filename)
@@ -30,7 +37,6 @@ for row in range(1, sheetR.nrows):
     #if sheetR.cell_type(row, 9) not in (xlrd.XL_CELL_EMPTY, xlrd.XL_CELL_BLANK):  # Проверка пуста ли ячейка
     regNumbers.add(sheetR.cell_value(row, 0))
 
-print(regNumbers)
 cont = 1
 for regnumber in regNumbers:
     cnt = 1
@@ -43,7 +49,10 @@ for regnumber in regNumbers:
     for row in range(1, sheetR.nrows):
         if regnumber == sheetR.cell_value(row, 0):
             for col in range(sheetR.ncols):
-                outSheet.write(cnt, col, sheetR.cell_value(row, col), style=style)
+                if col == 2:
+                    outSheet.write(cnt, col, sheetR.cell_value(row, col), style=date_style)
+                else:
+                    outSheet.write(cnt, col, sheetR.cell_value(row, col), style=style)
             cnt += 1
     outBook.save(path + '\\' + str(regnumber) + '.xls')
     print(cont, 'из', len(regNumbers), '   ', realpath(path + '\\' + str(regnumber) + '.xls'))
