@@ -49,7 +49,7 @@ for k in range(len(colsWidths)):
 count = 1
 
 outBook = xlwt.Workbook()
-outSheet = outBook.add_sheet(str(count)
+outSheet = outBook.add_sheet(str(count))
 
 for i in colDict:
     if colDict[i] == 0:
