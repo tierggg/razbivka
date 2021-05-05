@@ -7,18 +7,17 @@ from tkinter.filedialog import askdirectory
 from os import startfile
 from os.path import realpath
 
-filename = askopenfilename()
-rb = xlrd.open_workbook(filename)
-sheetR = rb.sheet_by_index(0)
+rb = xlrd.open_workbook(askopenfilename())
 path = askdirectory()
+sheetR = rb.sheet_by_index(0)
 
 
-font = xlwt.Font()  # font
-font.name = 'Times New Roman'
-font.height = 11 * 20  # Нужный размер шрифта нужно умножить на 20
-minifont = xlwt.Font()  # font
-minifont.name = 'Times New Roman'
-minifont.height = 8 * 20  # Нужный размер шрифта нужно умножить на 20
+normalFont = xlwt.Font()
+normalFont.name = 'Times New Roman'
+normalFont.height = 11 * 20  # Нужный размер шрифта нужно умножить на 20
+miniFont = xlwt.Font()
+miniFont.name = 'Times New Roman'
+miniFont.height = 8 * 20  # Нужный размер шрифта нужно умножить на 20
 fatFont = xlwt.Font()
 fatFont.name = 'Times New Roman'
 fatFont.height = 11 * 20
@@ -33,15 +32,15 @@ borders.bottom = 1
 date_style = xlwt.XFStyle()
 date_style.num_format_str = "M/D/YY"
 date_style.borders = borders
-date_style.font = font
+date_style.font = normalFont
 
 style = xlwt.XFStyle()
 style.borders = borders
-style.font = font
+style.font = normalFont
 
 ministyle = xlwt.XFStyle()
 ministyle.borders = borders
-ministyle.font = minifont
+ministyle.font = miniFont
 
 fatStyle = xlwt.XFStyle()
 fatStyle.borders = borders
@@ -49,7 +48,7 @@ fatStyle.font = fatFont
 
 firstReg = 1  # Номер первой строки после шапки (счёт идёт от 0)
 
-regColumn = 3  # Номер столбца с регномерами (счёт идёт от 0)
+regColumn = 2  # Номер столбца с регномерами (счёт идёт от 0)
 
 columnsWithDate = [10]  # Столбцы для которых нужен формат "ДАТА" - ЧЧ.ММ.ГГГГ
 
@@ -57,7 +56,7 @@ regNumber = set()
 for row in range(firstReg, sheetR.nrows):
     if sheetR.cell_type(row, regColumn) not in (xlrd.XL_CELL_EMPTY, xlrd.XL_CELL_BLANK):  # Проверка пуста ли ячейка
         regNumber.add(sheetR.cell_value(row, regColumn))
-        print(sheetR.cell_value(row, regColumn))
+        # print(sheetR.cell_value(row, regColumn))
 
 print('Найдено', len(regNumber), 'рег. номеров')
 
@@ -84,7 +83,7 @@ for val in regNumber:
                     if len(str(sheetR.cell_value(row, col))) < 175:
                         outSheet.col(col).width = len(str(sheetR.cell_value(row, col))) * 367
                     else:
-                        outSheet.col(col).width = 30*367
+                        outSheet.col(col).width = 30 * 367
 
                 if col in columnsWithDate:
                     outSheet.write(cnt, col, sheetR.cell_value(row, col), style=date_style)
@@ -92,8 +91,13 @@ for val in regNumber:
                     outSheet.write(cnt, col, sheetR.cell_value(row, col), style=style)
             cnt += 1
 
-    outBook.save(path + '\\' + str(val)[:-2] + '.xls')
-    print(cont, 'из', len(regNumber), '   ', realpath(path + '\\' + str(val)[:-2] + '.xls'))
+    if str(val)[-2:] == '.0':
+        valname = str(val)[:-2]
+    else:
+        valname = str(val)
+
+    outBook.save(path + '\\' + valname + '.xls')
+    print(cont, 'из', len(regNumber), '   ', realpath(path + '\\' + valname + '.xls'))
     cont += 1
 
 startfile(path)
