@@ -23,24 +23,24 @@ borders.right = 1
 borders.top = 1
 borders.bottom = 1
 
-style = XFStyle()
-style.borders = borders
+normalStyle = XFStyle()
+normalStyle.borders = borders
 normalFont = Font()
 normalFont.name = 'Times New Roman'
 normalFont.height = 11 * 20  # Нужный размер шрифта нужно умножить на 20
-style.font = normalFont
+normalStyle.font = normalFont
 
-date_style = XFStyle()
-date_style.num_format_str = "M/D/YY"
-date_style.borders = borders
-date_style.font = normalFont
+dateStyle = XFStyle()
+dateStyle.num_format_str = "M/D/YY"
+dateStyle.borders = borders
+dateStyle.font = normalFont
 
-ministyle = XFStyle()
-ministyle.borders = borders
+miniStyle = XFStyle()
+miniStyle.borders = borders
 miniFont = Font()
 miniFont.name = 'Times New Roman'
 miniFont.height = 8 * 20  # Нужный размер шрифта нужно умножить на 20
-ministyle.font = miniFont
+miniStyle.font = miniFont
 
 fatStyle = XFStyle()
 fatStyle.borders = borders
@@ -89,9 +89,9 @@ for val in regNumber:
                         outSheet.col(col).width = 30 * 367
 
                 if col in columnsWithDate:
-                    outSheet.write(rowCounter, col, sheetR.cell_value(row, col), style=date_style)
+                    outSheet.write(rowCounter, col, sheetR.cell_value(row, col), style=dateStyle)
                 else:
-                    outSheet.write(rowCounter, col, sheetR.cell_value(row, col), style=style)
+                    outSheet.write(rowCounter, col, sheetR.cell_value(row, col), style=normalStyle)
             rowCounter += 1
 
     if str(val)[-2:] == '.0':   # Иногда рег.номера читаются как float
