@@ -46,7 +46,7 @@ fatStyle = XFStyle()
 fatStyle.borders = borders
 fatFont = Font()
 fatFont.name = 'Times New Roman'
-fatFont.height = 11 * 20 # Нужный размер шрифта нужно умножить на 20
+fatFont.height = 11 * 20  # Нужный размер шрифта нужно умножить на 20
 fatFont.bold = True
 fatStyle.font = fatFont
 
@@ -54,23 +54,22 @@ firstReg = 1  # Номер первой строки после шапки (сч
 
 regColumn = 3  # Номер столбца с рег.номерами (счёт идёт от 0)
 
-columnsWithDate = [10]  # Номера столбцов для которых нужен формат "ДАТА" - ЧЧ.ММ.ГГГГ (счёт идёт от 0)
+columnsWithDate = [10]  # Номера столбцов, через запятую (счёт идёт от 0), для которых нужен формат "ДАТА" - ЧЧ.ММ.ГГГГ
 
 regNumber = set()
 for row in range(firstReg, sheetR.nrows):
     if sheetR.cell_type(row, regColumn) not in (XL_CELL_EMPTY, XL_CELL_BLANK):  # Проверка пуста ли ячейка
         regNumber.add(sheetR.cell_value(row, regColumn))
-
 print('Найдено', len(regNumber), 'рег. номеров')
 
-cont = 1
+cont = 1  # Просто счётчик
 for val in regNumber:
     rowCounter = firstReg
     outBook = Workbook()
     outSheet = outBook.add_sheet(str(val))
 
     for row in range(0, rowCounter):  # Заполнение шапки
-        '''if row == 2:
+        '''if row == 2:               # Номер строки в которой нужен мелкий шрифт
             for col in range(sheetR.ncols):
                 outSheet.write(row, col, sheetR.cell_value(row, col), style=ministyle)
         else:'''
