@@ -54,7 +54,7 @@ firstReg = 1  # Номер первой строки после шапки (сч
 
 regColumn = 3  # Номер столбца с рег.номерами (счёт идёт от 0)
 
-columnsWithDate = [10]  # Номера столбцов, через запятую (счёт идёт от 0), для которых нужен формат "ДАТА" - ЧЧ.ММ.ГГГГ
+columnsWithDate = [10]  # Номера столбцов, через запятую, (счёт идёт от 0), для которых нужен формат "ДАТА" - ЧЧ.ММ.ГГГГ
 
 regNumber = set()
 for row in range(firstReg, sheetR.nrows):
@@ -69,6 +69,7 @@ for val in regNumber:
     outSheet = outBook.add_sheet(str(val))
 
     for row in range(0, rowCounter):  # Заполнение шапки
+
         '''if row == 2:               # Номер строки в которой нужен мелкий шрифт
             for col in range(sheetR.ncols):
                 outSheet.write(row, col, sheetR.cell_value(row, col), style=ministyle)
@@ -93,7 +94,7 @@ for val in regNumber:
                     outSheet.write(rowCounter, col, sheetR.cell_value(row, col), style=style)
             rowCounter += 1
 
-    if str(val)[-2:] == '.0':
+    if str(val)[-2:] == '.0':   # Иногда рег.номера читаются как float
         valname = str(val)[:-2]
     else:
         valname = str(val)
