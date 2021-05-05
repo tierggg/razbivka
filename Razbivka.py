@@ -1,72 +1,75 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import xlrd
-import xlwt
+
+from xlrd import open_workbook
+from xlrd import XL_CELL_EMPTY
+from xlrd import XL_CELL_BLANK
+from xlwt import Borders
+from xlwt import XFStyle
+from xlwt import Font
+from xlwt import Workbook
 from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import askdirectory
 from os import startfile
 from os.path import realpath
 
-rb = xlrd.open_workbook(askopenfilename())
+rb = open_workbook(askopenfilename())
 path = askdirectory()
 sheetR = rb.sheet_by_index(0)
 
-
-normalFont = xlwt.Font()
-normalFont.name = 'Times New Roman'
-normalFont.height = 11 * 20  # Нужный размер шрифта нужно умножить на 20
-miniFont = xlwt.Font()
-miniFont.name = 'Times New Roman'
-miniFont.height = 8 * 20  # Нужный размер шрифта нужно умножить на 20
-fatFont = xlwt.Font()
-fatFont.name = 'Times New Roman'
-fatFont.height = 11 * 20
-fatFont.bold = True
-
-borders = xlwt.Borders()  # borders
+borders = Borders()
 borders.left = 1
 borders.right = 1
 borders.top = 1
 borders.bottom = 1
 
-date_style = xlwt.XFStyle()
+style = XFStyle()
+style.borders = borders
+normalFont = Font()
+normalFont.name = 'Times New Roman'
+normalFont.height = 11 * 20  # Нужный размер шрифта нужно умножить на 20
+style.font = normalFont
+
+date_style = XFStyle()
 date_style.num_format_str = "M/D/YY"
 date_style.borders = borders
 date_style.font = normalFont
 
-style = xlwt.XFStyle()
-style.borders = borders
-style.font = normalFont
-
-ministyle = xlwt.XFStyle()
+ministyle = XFStyle()
 ministyle.borders = borders
+miniFont = Font()
+miniFont.name = 'Times New Roman'
+miniFont.height = 8 * 20  # Нужный размер шрифта нужно умножить на 20
 ministyle.font = miniFont
 
-fatStyle = xlwt.XFStyle()
+fatStyle = XFStyle()
 fatStyle.borders = borders
+fatFont = Font()
+fatFont.name = 'Times New Roman'
+fatFont.height = 11 * 20 # Нужный размер шрифта нужно умножить на 20
+fatFont.bold = True
 fatStyle.font = fatFont
 
 firstReg = 1  # Номер первой строки после шапки (счёт идёт от 0)
 
-regColumn = 2  # Номер столбца с регномерами (счёт идёт от 0)
+regColumn = 3  # Номер столбца с рег.номерами (счёт идёт от 0)
 
-columnsWithDate = [10]  # Столбцы для которых нужен формат "ДАТА" - ЧЧ.ММ.ГГГГ
+columnsWithDate = [10]  # Номера столбцов для которых нужен формат "ДАТА" - ЧЧ.ММ.ГГГГ (счёт идёт от 0)
 
 regNumber = set()
 for row in range(firstReg, sheetR.nrows):
-    if sheetR.cell_type(row, regColumn) not in (xlrd.XL_CELL_EMPTY, xlrd.XL_CELL_BLANK):  # Проверка пуста ли ячейка
+    if sheetR.cell_type(row, regColumn) not in (XL_CELL_EMPTY, XL_CELL_BLANK):  # Проверка пуста ли ячейка
         regNumber.add(sheetR.cell_value(row, regColumn))
-        # print(sheetR.cell_value(row, regColumn))
 
 print('Найдено', len(regNumber), 'рег. номеров')
 
 cont = 1
 for val in regNumber:
-    cnt = firstReg
-    outBook = xlwt.Workbook()
+    rowCounter = firstReg
+    outBook = Workbook()
     outSheet = outBook.add_sheet(str(val))
 
-    for row in range(0, cnt):  # Заполнение шапки
+    for row in range(0, rowCounter):  # Заполнение шапки
         '''if row == 2:
             for col in range(sheetR.ncols):
                 outSheet.write(row, col, sheetR.cell_value(row, col), style=ministyle)
@@ -74,7 +77,7 @@ for val in regNumber:
         for col in range(sheetR.ncols):
             outSheet.write(row, col, sheetR.cell_value(row, col), style=fatStyle)
 
-    for row in range(cnt, sheetR.nrows):
+    for row in range(rowCounter, sheetR.nrows):
         if val == sheetR.cell_value(row, regColumn):
             for col in range(sheetR.ncols):
 
@@ -86,10 +89,10 @@ for val in regNumber:
                         outSheet.col(col).width = 30 * 367
 
                 if col in columnsWithDate:
-                    outSheet.write(cnt, col, sheetR.cell_value(row, col), style=date_style)
+                    outSheet.write(rowCounter, col, sheetR.cell_value(row, col), style=date_style)
                 else:
-                    outSheet.write(cnt, col, sheetR.cell_value(row, col), style=style)
-            cnt += 1
+                    outSheet.write(rowCounter, col, sheetR.cell_value(row, col), style=style)
+            rowCounter += 1
 
     if str(val)[-2:] == '.0':
         valname = str(val)[:-2]
