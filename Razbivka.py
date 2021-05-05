@@ -13,9 +13,9 @@ from tkinter.filedialog import askdirectory
 from os import startfile
 from os.path import realpath
 
-rb = open_workbook(askopenfilename())
-path = askdirectory()
-sheetR = rb.sheet_by_index(0)
+readBook = open_workbook(askopenfilename())
+outputPath = askdirectory()
+sheetR = readBook.sheet_by_index(0)
 
 borders = Borders()
 borders.left = 1
@@ -99,8 +99,8 @@ for val in regNumber:
     else:
         valname = str(val)
 
-    outBook.save(path + '\\' + valname + '.xls')
-    print(cont, 'из', len(regNumber), '   ', realpath(path + '\\' + valname + '.xls'))
+    outBook.save(outputPath + '\\' + valname + '.xls')
+    print(cont, 'из', len(regNumber), '   ', realpath(outputPath + '\\' + valname + '.xls'))
     cont += 1
 
-startfile(path)
+startfile(outputPath)
