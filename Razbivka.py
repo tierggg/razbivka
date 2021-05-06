@@ -13,6 +13,16 @@ from tkinter.filedialog import askdirectory
 from os import startfile
 from os.path import realpath
 
+
+def autofitcolumnwidth(rownumber, colnumber, readsheet, outsheet):  # автоподбор ширины столбца
+    standartWidth = outsheet.col(colnumber).width
+    if (len(str(readsheet.cell_value(rownumber, colnumber))) * 367) > standartWidth:
+        if len(str(readsheet.cell_value(rownumber, colnumber))) < 175:
+            outsheet.col(colnumber).width = len(str(readsheet.cell_value(rownumber, colnumber))) * 367
+        else:
+            outsheet.col(colnumber).width = 30 * 367
+
+
 firstReg = 1  # Номер первой строки после шапки (счёт идёт от 0)
 miniRows = []  # Номера строк в шапке, для которых нужен мелкий шрифт, через запятую [0, 3, 5], (счёт идёт от 0)
 regColumn = 3  # Номер столбца с рег.номерами (счёт идёт от 0)
@@ -62,17 +72,7 @@ for row in range(firstReg, sheetR.nrows):
         print(regNumber)
 print('Найдено', len(regNumber), 'рег. номеров')
 
-
-def autofitcolumnwidth(rownumber, colnumber, readsheet, outsheet):  # автоподбор ширины столбца
-    standartWidth = outsheet.col(colnumber).width
-    if (len(str(readsheet.cell_value(rownumber, colnumber))) * 367) > standartWidth:
-        if len(str(readsheet.cell_value(rownumber, colnumber))) < 175:
-            outsheet.col(colnumber).width = len(str(readsheet.cell_value(rownumber, colnumber))) * 367
-        else:
-            outsheet.col(colnumber).width = 30 * 367
-
-
-cont = 1  # Просто счётчик для вывода print
+cont = 1  # Просто счётчик для вывода
 for val in regNumber:
 
     if isinstance(val, float):  # Иногда рег.номера читаются как float
