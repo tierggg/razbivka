@@ -13,6 +13,12 @@ from tkinter.filedialog import askdirectory
 from os import startfile
 from os.path import realpath
 
+
+firstReg = 1  # Номер первой строки после шапки (счёт идёт от 0)
+miniRows = []  # Номера строк в шапке, для которых нужен мелкий шрифт, через запятую [0, 3, 5], (счёт идёт от 0)
+regColumn = 0  # Номер столбца с рег.номерами (счёт идёт от 0)
+columnsWithDate = []  # Номера столбцов для которых нужен формат "ДАТА" - ЧЧ.ММ.ГГГГ, через запятую, (счёт идёт от 0)
+
 readBook = open_workbook(askopenfilename())
 outputPath = askdirectory()
 sheetR = readBook.sheet_by_index(0)
@@ -49,14 +55,6 @@ fatFont.name = 'Times New Roman'
 fatFont.height = 11 * 20
 fatFont.bold = True
 fatStyle.font = fatFont
-
-firstReg = 1  # Номер первой строки после шапки (счёт идёт от 0)
-
-miniRows = []  # Номера строк в шапке, для которых нужен мелкий шрифт, через запятую, (счёт идёт от 0)
-
-regColumn = 0  # Номер столбца с рег.номерами (счёт идёт от 0)
-
-columnsWithDate = []  # Номера столбцов для которых нужен формат "ДАТА" - ЧЧ.ММ.ГГГГ, через запятую, (счёт идёт от 0)
 
 regNumber = set()
 for row in range(firstReg, sheetR.nrows):
