@@ -4,20 +4,19 @@
 from xlrd import open_workbook
 from xlrd import XL_CELL_EMPTY
 from xlrd import XL_CELL_BLANK
+from xlwt import Workbook
 from xlwt import Borders
 from xlwt import XFStyle
 from xlwt import Font
-from xlwt import Workbook
 from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import askdirectory
 from os import startfile
 from os.path import realpath
 
-
 firstReg = 1  # Номер первой строки после шапки (счёт идёт от 0)
 miniRows = []  # Номера строк в шапке, для которых нужен мелкий шрифт, через запятую [0, 3, 5], (счёт идёт от 0)
-regColumn = 0  # Номер столбца с рег.номерами (счёт идёт от 0)
-columnsWithDate = []  # Номера столбцов для которых нужен формат "ДАТА" - ЧЧ.ММ.ГГГГ, через запятую, (счёт идёт от 0)
+regColumn = 3  # Номер столбца с рег.номерами (счёт идёт от 0)
+columnsWithDate = [10]  # Номера столбцов для которых нужен формат "ДАТА" - ЧЧ.ММ.ГГГГ, через запятую, (счёт идёт от 0)
 
 readBook = open_workbook(askopenfilename())
 outputPath = askdirectory()
@@ -75,9 +74,15 @@ def autofitcolumnwidth(rownumber, colnumber, readsheet, outsheet):  # автоп
 
 cont = 1  # Просто счётчик для вывода print
 for val in regNumber:
-    rowCounter = firstReg
+
+    if isinstance(val, float):  # Иногда рег.номера читаются как float
+        valname = str(int(val))
+    else:
+        valname = str(val)
+
     outBook = Workbook()
-    outSheet = outBook.add_sheet(str(val))
+    outSheet = outBook.add_sheet(str(valname))
+    rowCounter = firstReg
 
     for row in range(0, rowCounter):  # Заполнение шапки
         for col in range(sheetR.ncols):
@@ -101,11 +106,6 @@ for val in regNumber:
                     outSheet.write(rowCounter, col, sheetR.cell_value(row, col), style=normalStyle)
 
             rowCounter += 1
-
-    if str(val)[-2:] == '.0':   # Иногда рег.номера читаются как float
-        valname = str(val)[:-2]
-    else:
-        valname = str(val)
 
     outBook.save(outputPath + '\\' + valname + '.xls')
     print(cont, 'из', len(regNumber), '   ', realpath(outputPath + '\\' + valname + '.xls'))
