@@ -54,18 +54,28 @@ firstReg = 1  # Номер первой строки после шапки (сч
 
 miniRows = []  # Номера строк в шапке, для которых нужен мелкий шрифт, через запятую, (счёт идёт от 0)
 
-regColumn = 3  # Номер столбца с рег.номерами (счёт идёт от 0)
+regColumn = 0  # Номер столбца с рег.номерами (счёт идёт от 0)
 
-columnsWithDate = [10]  # Номера столбцов для которых нужен формат "ДАТА" - ЧЧ.ММ.ГГГГ, через запятую, (счёт идёт от 0)
+columnsWithDate = []  # Номера столбцов для которых нужен формат "ДАТА" - ЧЧ.ММ.ГГГГ, через запятую, (счёт идёт от 0)
 
 regNumber = set()
 for row in range(firstReg, sheetR.nrows):
     if sheetR.cell_type(row, regColumn) not in (XL_CELL_EMPTY, XL_CELL_BLANK):  # Проверка пуста ли ячейка
         regNumber.add(sheetR.cell_value(row, regColumn))
-print(regNumber)
+        print(regNumber)
 print('Найдено', len(regNumber), 'рег. номеров')
 
-cont = 1  # Просто счётчик
+
+def autofitcolumnwidth(rownumber, colnumber, readsheet, outsheet):  # автоподбор ширины столбца
+    standartWidth = outsheet.col(colnumber).width
+    if (len(str(readsheet.cell_value(rownumber, colnumber))) * 367) > standartWidth:
+        if len(str(readsheet.cell_value(rownumber, colnumber))) < 175:
+            outsheet.col(colnumber).width = len(str(readsheet.cell_value(rownumber, colnumber))) * 367
+        else:
+            outsheet.col(colnumber).width = 30 * 367
+
+
+cont = 1  # Просто счётчик для вывода print
 for val in regNumber:
     rowCounter = firstReg
     outBook = Workbook()
@@ -73,6 +83,9 @@ for val in regNumber:
 
     for row in range(0, rowCounter):  # Заполнение шапки
         for col in range(sheetR.ncols):
+
+            autofitcolumnwidth(row, col, sheetR, outSheet)
+
             if row in miniRows:
                 outSheet.write(row, col, sheetR.cell_value(row, col), style=miniStyle)
             else:
@@ -82,12 +95,7 @@ for val in regNumber:
         if val == sheetR.cell_value(row, regColumn):
             for col in range(sheetR.ncols):
 
-                cwidth = outSheet.col(col).width
-                if (len(str(sheetR.cell_value(row, col))) * 367) > cwidth:
-                    if len(str(sheetR.cell_value(row, col))) < 175:
-                        outSheet.col(col).width = len(str(sheetR.cell_value(row, col))) * 367
-                    else:
-                        outSheet.col(col).width = 30 * 367
+                autofitcolumnwidth(row, col, sheetR, outSheet)
 
                 if col in columnsWithDate:
                     outSheet.write(rowCounter, col, sheetR.cell_value(row, col), style=dateStyle)
