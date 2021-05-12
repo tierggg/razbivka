@@ -30,7 +30,7 @@ columnsWithDate = [10]  # Номера столбцов для которых н
 
 readBook = open_workbook(askopenfilename())
 outputPath = askdirectory()
-sheetR = readBook.sheet_by_index(0)
+readSheet = readBook.sheet_by_index(0)
 
 borders = Borders()
 borders.left = 1
@@ -66,9 +66,9 @@ fatFont.bold = True
 fatStyle.font = fatFont
 
 regNumber = set()
-for row in range(firstReg, sheetR.nrows):
-    if sheetR.cell_type(row, regColumn) not in (XL_CELL_EMPTY, XL_CELL_BLANK):  # Проверка пуста ли ячейка
-        regNumber.add(sheetR.cell_value(row, regColumn))
+for row in range(firstReg, readSheet.nrows):
+    if readSheet.cell_type(row, regColumn) not in (XL_CELL_EMPTY, XL_CELL_BLANK):  # Проверка пуста ли ячейка
+        regNumber.add(readSheet.cell_value(row, regColumn))
         print(regNumber)
 print('Найдено', len(regNumber), 'рег. номеров')
 
@@ -85,25 +85,25 @@ for val in regNumber:
     rowCounter = firstReg
 
     for row in range(0, rowCounter):  # Заполнение шапки
-        for col in range(sheetR.ncols):
+        for col in range(readSheet.ncols):
 
-            autofitcolumnwidth(row, col, sheetR, outSheet)
+            autofitcolumnwidth(row, col, readSheet, outSheet)
 
             if row in miniRows:
-                outSheet.write(row, col, sheetR.cell_value(row, col), style=miniStyle)
+                outSheet.write(row, col, readSheet.cell_value(row, col), style=miniStyle)
             else:
-                outSheet.write(row, col, sheetR.cell_value(row, col), style=fatStyle)
+                outSheet.write(row, col, readSheet.cell_value(row, col), style=fatStyle)
 
-    for row in range(rowCounter, sheetR.nrows):  # Заполнение основной части
-        if val == sheetR.cell_value(row, regColumn):
-            for col in range(sheetR.ncols):
+    for row in range(rowCounter, readSheet.nrows):  # Заполнение основной части
+        if val == readSheet.cell_value(row, regColumn):
+            for col in range(readSheet.ncols):
 
-                autofitcolumnwidth(row, col, sheetR, outSheet)
+                autofitcolumnwidth(row, col, readSheet, outSheet)
 
                 if col in columnsWithDate:
-                    outSheet.write(rowCounter, col, sheetR.cell_value(row, col), style=dateStyle)
+                    outSheet.write(rowCounter, col, readSheet.cell_value(row, col), style=dateStyle)
                 else:
-                    outSheet.write(rowCounter, col, sheetR.cell_value(row, col), style=normalStyle)
+                    outSheet.write(rowCounter, col, readSheet.cell_value(row, col), style=normalStyle)
 
             rowCounter += 1
 
