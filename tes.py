@@ -6,7 +6,7 @@ workbook = xlsxwriter.Workbook('demo.xlsx')
 worksheet = workbook.add_worksheet()
 
 # Widen the first column to make the text clearer.
-worksheet.set_column('A:A', 20)
+standartwidth = worksheet.set_column('A:A', 20)
 
 # Add a bold format to use to highlight cells.
 bold = workbook.add_format({'bold': True})
@@ -25,3 +25,8 @@ worksheet.write(3, 0, 123.456)
 #worksheet.insert_image('B5', 'logo.png')
 
 workbook.close()
+
+from tkinter.filedialog import askdirectory
+
+rr = askdirectory()
+print(rr)
