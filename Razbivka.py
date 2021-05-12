@@ -69,7 +69,7 @@ regNumber = set()
 for row in range(firstReg, readSheet.nrows):
     if readSheet.cell_type(row, regColumn) not in (XL_CELL_EMPTY, XL_CELL_BLANK):  # Проверка пуста ли ячейка
         regNumber.add(readSheet.cell_value(row, regColumn))
-        print(regNumber)
+print(regNumber)
 print('Найдено', len(regNumber), 'рег. номеров')
 
 cont = 1  # Просто счётчик для вывода
