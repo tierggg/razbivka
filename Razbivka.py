@@ -25,8 +25,9 @@ def autofitcolumnwidth(rownumber, colnumber, readsheet, outsheet):  # автоп
 
 firstReg = 1  # Номер первой строки после шапки (счёт идёт от 0)
 miniRows = []  # Номера строк в шапке, для которых нужен мелкий шрифт, через запятую [0, 3, 5], (счёт идёт от 0)
-regColumn = 3  # Номер столбца с рег.номерами (счёт идёт от 0)
-columnsWithDate = [10]  # Номера столбцов для которых нужен формат "ДАТА" - ЧЧ.ММ.ГГГГ, через запятую, (счёт идёт от 0)
+regColumn = 5  # Номер столбца с рег.номерами (счёт идёт от 0)
+columnsWithDate = [16]  # Номера столбцов для которых нужен формат "ДАТА" - ЧЧ.ММ.ГГГГ, через запятую, (счёт идёт от 0)
+titleAutofit = 0   # 1 Если нужен автоподбор ширины заголовков
 
 readBook = open_workbook(askopenfilename())
 outputPath = askdirectory()
@@ -87,7 +88,8 @@ for val in regNumber:
     for row in range(0, rowCounter):  # Заполнение шапки
         for col in range(readSheet.ncols):
 
-            autofitcolumnwidth(row, col, readSheet, outSheet)
+            if titleAutofit == 1:
+                autofitcolumnwidth(row, col, readSheet, outSheet)
 
             if row in miniRows:
                 outSheet.write(row, col, readSheet.cell_value(row, col), style=miniStyle)
